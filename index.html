@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="this.live LLC — a software publishing house. Three products. One standard: ship something real." />
+  <title>this.live — Software Publishing</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void:    '#0a0a0a',
+            space:   '#0f172a',
+            surface: '#1e293b',
+            cyan: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2',
+            },
+            violet: {
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+            },
+            crimson: {
+              400: '#f87171',
+              500: '#ef4444',
+              600: '#dc2626',
+            },
+            blue: {
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+            },
+          },
+          fontFamily: {
+            sans:    ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono:    ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ── CSS Custom Properties ─────────────────────────────────── */
+    :root {
+      --void:           #0a0a0a;
+      --space:          #0f172a;
+      --surface:        #1e293b;
+      --glass:          rgba(255,255,255,0.04);
+      --glass-hover:    rgba(255,255,255,0.07);
+      --border:         rgba(255,255,255,0.08);
+      --border-bright:  rgba(255,255,255,0.15);
+      --text-bright:    #f8fafc;
+      --text-body:      rgba(255,255,255,0.65);
+      --text-muted:     rgba(255,255,255,0.40);
+      --text-subtle:    rgba(255,255,255,0.25);
+
+      /* Accent — this.live multi */
+      --accent-1:       #06b6d4;
+      --accent-2:       #8b5cf6;
+      --accent-glow:    rgba(6,182,212,0.30);
+
+      /* Per-product */
+      --beacon-accent:       #06b6d4;
+      --beacon-glow:         rgba(6,182,212,0.35);
+      --brokernomex-accent:  #8b5cf6;
+      --brokernomex-glow:    rgba(139,92,246,0.35);
+      --crest-accent:        #ef4444;
+      --crest-glow:          rgba(239,68,68,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { background: var(--void); }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--void);
+      color: var(--text-body);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Grain Overlay ──────────────────────────────────────────── */
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    /* ── Navigation ─────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 72px;
+      background: rgba(10,10,10,0.80);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--beacon-accent), var(--brokernomex-accent));
+      flex-shrink: 0;
+    }
+
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--text-bright);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.60);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus {
+      color: var(--beacon-accent);
+      outline: none;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: rgba(255,255,255,0.70);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,10,0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px 24px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.70);
+      text-decoration: none;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    .mobile-menu a:hover { color: var(--beacon-accent); }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: var(--void);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(120px);
+    }
+
+    .hero-orb--cyan {
+      width: 600px;
+      height: 600px;
+      background: rgba(6,182,212,0.12);
+      top: -100px;
+      right: -150px;
+      animation: orb-drift-1 14s ease-in-out infinite alternate;
+    }
+
+    .hero-orb--violet {
+      width: 500px;
+      height: 500px;
+      background: rgba(139,92,246,0.10);
+      bottom: -80px;
+      left: -120px;
+      animation: orb-drift-2 16s ease-in-out infinite alternate;
+    }
+
+    .hero-orb--crimson {
+      width: 400px;
+      height: 400px;
+      background: rgba(239,68,68,0.07);
+      top: 30%;
+      right: 25%;
+      animation: orb-drift-3 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes orb-drift-1 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(-60px, 50px) scale(1.12); }
+    }
+
+    @keyframes orb-drift-2 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(50px, -40px) scale(1.10); }
+    }
+
+    @keyframes orb-drift-3 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 60px) scale(1.08); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--beacon-accent), var(--brokernomex-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+
+    .hero-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(40px, 6vw, 72px);
+      color: var(--text-bright);
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      max-width: 720px;
+      margin-bottom: 24px;
+      opacity: 0;
+    }
+
+    .hero-sub {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      color: var(--text-body);
+      line-height: 1.65;
+      max-width: 540px;
+      margin-bottom: 40px;
+      opacity: 0;
+    }
+
+    .hero-buttons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+    }
+
+    /* ── Button System ──────────────────────────────────────────── */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--beacon-accent), var(--brokernomex-accent));
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--brokernomex-accent), var(--beacon-accent));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-primary span { position: relative; z-index: 1; }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 30px rgba(6,182,212,0.30), 0 4px 16px rgba(139,92,246,0.25);
+    }
+
+    .btn-primary:hover::before { opacity: 1; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-bright);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      background: var(--glass);
+      border-color: var(--beacon-accent);
+      box-shadow: 0 0 20px rgba(6,182,212,0.15);
+    }
+
+    /* ── Scroll Indicator ───────────────────────────────────────── */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 1;
+    }
+
+    .scroll-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      animation: scroll-bounce 2.2s ease-in-out infinite;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+    }
+
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.35; }
+      50%       { transform: translateY(8px); opacity: 0.70; }
+    }
+
+    /* ── Section Common ─────────────────────────────────────────── */
+    .section-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--beacon-accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(32px, 4vw, 48px);
+      color: var(--text-bright);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    /* ── Products Section ───────────────────────────────────────── */
+    .products {
+      background: var(--space);
+      padding: 120px 0;
+    }
+
+    .products-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .products-header {
+      margin-bottom: 64px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ── Glass Card ─────────────────────────────────────────────── */
+    .glass-card {
+      position: relative;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      opacity: 0;
+    }
+
+    .glass-card:hover {
+      background: var(--glass-hover);
+      border-color: var(--border-bright);
+      transform: translateY(-4px);
+    }
+
+    .glass-card--beacon:hover  { box-shadow: 0 0 48px rgba(6,182,212,0.22),   0 8px 32px rgba(0,0,0,0.4); }
+    .glass-card--brokernomex:hover { box-shadow: 0 0 48px rgba(139,92,246,0.22), 0 8px 32px rgba(0,0,0,0.4); }
+    .glass-card--crest:hover   { box-shadow: 0 0 48px rgba(239,68,68,0.22),   0 8px 32px rgba(0,0,0,0.4); }
+
+    .card-accent-bar {
+      height: 3px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    .card-accent-bar--beacon      { background: linear-gradient(90deg, #06b6d4, transparent); }
+    .card-accent-bar--brokernomex { background: linear-gradient(90deg, #8b5cf6, transparent); }
+    .card-accent-bar--crest       { background: linear-gradient(90deg, #ef4444, transparent); }
+
+    .card-body {
+      padding: 28px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.03em;
+    }
+
+    .badge--live {
+      background: rgba(16,185,129,0.15);
+      color: #10B981;
+      border: 1px solid rgba(16,185,129,0.30);
+    }
+
+    .badge--soon {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.50);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .badge--live .badge-dot {
+      animation: pulse-dot 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      color: var(--text-bright);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-tagline--beacon      { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; color: var(--beacon-accent);      margin-bottom: 16px; }
+    .card-tagline--brokernomex { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; color: var(--brokernomex-accent); margin-bottom: 16px; }
+    .card-tagline--crest       { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; color: var(--crest-accent);       margin-bottom: 16px; }
+
+    .card-description {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      color: var(--text-body);
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 28px;
+    }
+
+    .card-cta {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    .card-cta--beacon      { color: var(--beacon-accent); }
+    .card-cta--brokernomex { color: var(--brokernomex-accent); }
+    .card-cta--crest       { color: var(--crest-accent); }
+
+    .card-cta:hover { text-decoration: underline; opacity: 0.80; }
+
+    /* ── Gradient Separator ─────────────────────────────────────── */
+    .gradient-sep {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(6,182,212,0.30), rgba(139,92,246,0.30), transparent);
+    }
+
+    /* ── About Section ──────────────────────────────────────────── */
+    .about {
+      background: var(--void);
+      padding: 120px 0;
+    }
+
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-headline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 3.5vw, 40px);
+      color: var(--text-bright);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .about-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--text-body);
+      line-height: 1.75;
+    }
+
+    /* Pixel grid */
+    .pixel-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 20px);
+      grid-template-rows: repeat(6, 20px);
+      gap: 4px;
+      justify-self: center;
+    }
+
+    .pixel-grid-cell {
+      width: 20px;
+      height: 20px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+      cursor: default;
+    }
+
+    .pixel-grid-cell:hover {
+      background: rgba(6,182,212,0.50);
+      box-shadow: 0 0 10px rgba(6,182,212,0.40);
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .footer {
+      background: var(--void);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 0;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .footer-cols {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      text-decoration: none;
+    }
+
+    .footer-logo-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--beacon-accent), var(--brokernomex-accent));
+    }
+
+    .footer-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--text-bright);
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .footer-col-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover { color: var(--beacon-accent); }
+
+    .footer-built {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: -0.01em;
+      padding-top: 4px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copyright {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero-content { padding: 0 20px; }
+      .hero-buttons { gap: 12px; }
+
+      .products { padding: 80px 0; }
+      .products-inner { padding: 0 20px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .products-header { margin-bottom: 40px; }
+
+      .about { padding: 80px 0; }
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 52px;
+        padding: 0 20px;
+      }
+
+      .pixel-grid { justify-self: start; }
+
+      .footer-inner { padding: 0 20px; }
+      .footer-cols {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+    }
+
+    @media (max-width: 1024px) and (min-width: 769px) {
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Grain overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ── Navigation ─────────────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="this.live — home">
+        <div class="nav-logo-dot" aria-hidden="true"></div>
+        <span class="nav-logo-text">this.live</span>
+      </a>
+
+      <div class="nav-links" id="nav-links">
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+        <a href="mailto:hello@this.live">Contact</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu" role="menu">
+    <a href="#products" role="menuitem">Products</a>
+    <a href="#about" role="menuitem">About</a>
+    <a href="mailto:hello@this.live" role="menuitem">Contact</a>
+  </div>
+
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <!-- Atmosphere orbs -->
+    <div class="hero-orb hero-orb--cyan"    aria-hidden="true"></div>
+    <div class="hero-orb hero-orb--violet"  aria-hidden="true"></div>
+    <div class="hero-orb hero-orb--crimson" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow" id="hero-eyebrow">Software Publishing</p>
+      <h1 class="hero-headline" id="hero-headline">We build tools<br>that move fast.</h1>
+      <p class="hero-sub" id="hero-sub">
+        this.live publishes software for people who mean business. Three products. One standard: ship something real.
+      </p>
+      <div class="hero-buttons" id="hero-buttons">
+        <a href="#products" class="btn-primary"><span>See our products</span></a>
+        <a href="#about"    class="btn-ghost">Learn more</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-dot"></div>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── Products ───────────────────────────────────────────────── -->
+  <section class="products" id="products" aria-label="Products">
+    <div class="products-inner">
+      <div class="products-header">
+        <span class="section-eyebrow">What We Build</span>
+        <h2 class="section-headline">Three products. One standard.</h2>
+      </div>
+
+      <div class="cards-grid" id="cards-grid">
+
+        <!-- Beacon -->
+        <article class="glass-card glass-card--beacon">
+          <div class="card-accent-bar card-accent-bar--beacon"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-icon">
+                <!-- Signal / WiFi arcs SVG -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"  stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"   stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.50"/>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"  stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="20" r="1.2" fill="#06b6d4"/>
+                </svg>
+              </div>
+              <span class="badge badge--live">
+                <span class="badge-dot"></span>
+                Launching Now
+              </span>
+            </div>
+
+            <h3 class="card-title">Beacon</h3>
+            <p class="card-tagline--beacon">Your business, found.</p>
+            <p class="card-description">
+              AI-powered lead generation built for contractors. Beacon surfaces qualified prospects, automates outreach, and fills your pipeline — so you can focus on the work you're good at.
+            </p>
+            <a href="https://beacon.this.live" class="card-cta card-cta--beacon" target="_blank" rel="noopener">
+              Beacon &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Brokernomex -->
+        <article class="glass-card glass-card--brokernomex">
+          <div class="card-accent-bar card-accent-bar--brokernomex"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-icon">
+                <!-- Trend line SVG -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <polyline points="3,17 8,11 13,14 21,5" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="16,5 21,5 21,10"       stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="3" y1="21" x2="21" y2="21"    stroke="#8b5cf6" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/>
+                </svg>
+              </div>
+              <span class="badge badge--soon">
+                <span class="badge-dot"></span>
+                Coming Soon
+              </span>
+            </div>
+
+            <h3 class="card-title">Brokernomex</h3>
+            <p class="card-tagline--brokernomex">The machine that learns to win.</p>
+            <p class="card-description">
+              An agentic portfolio manager that adapts in real time. Brokernomex monitors positions, executes strategy, and compounds edge — without waiting for a human to click.
+            </p>
+            <a href="https://brokernomex.this.live" class="card-cta card-cta--brokernomex" target="_blank" rel="noopener">
+              Brokernomex &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Crest -->
+        <article class="glass-card glass-card--crest">
+          <div class="card-accent-bar card-accent-bar--crest"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-icon">
+                <!-- Shield / trophy SVG -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2L3 6v5c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V6L12 2z" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="9,12 11,14 15,10" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="badge badge--soon">
+                <span class="badge-dot"></span>
+                Coming Soon
+              </span>
+            </div>
+
+            <h3 class="card-title">Crest</h3>
+            <p class="card-tagline--crest">Sports games worth playing.</p>
+            <p class="card-description">
+              A mobile sports game studio with a standard for quality. First title: T20 cricket. Fast, deep, and built for fans who know the difference between a game made with care and one made to extract.
+            </p>
+            <a href="https://crest.this.live" class="card-cta card-cta--crest" target="_blank" rel="noopener">
+              Crest &rarr;
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Separator ───────────────────────────────────────────────── -->
+  <div class="gradient-sep" aria-hidden="true"></div>
+
+  <!-- ── About / Philosophy ──────────────────────────────────────── -->
+  <section class="about" id="about" aria-label="About this.live">
+    <div class="about-inner">
+
+      <!-- Left column -->
+      <div class="about-left">
+        <h2 class="about-headline" id="about-headline">Built to ship.</h2>
+        <p class="about-body" id="about-body">
+          this.live was founded on one belief: great software should exist for everyone who needs it. We build with speed, precision, and no tolerance for filler. Every product earns its place.
+        </p>
+      </div>
+
+      <!-- Right column — pixel grid -->
+      <div class="pixel-grid" id="pixel-grid" aria-hidden="true">
+        <!-- 36 cells generated by JS below -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Separator ───────────────────────────────────────────────── -->
+  <div class="gradient-sep" aria-hidden="true"></div>
+
+  <!-- ── Footer ──────────────────────────────────────────────────── -->
+  <footer class="footer" aria-label="Footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+
+        <!-- Col 1 -->
+        <div>
+          <a href="#" class="footer-logo" aria-label="this.live">
+            <div class="footer-logo-dot" aria-hidden="true"></div>
+            <span class="footer-logo-text">this.live</span>
+          </a>
+          <p class="footer-tagline">
+            A software publishing house. Ship products that find customers, grow wealth, and compete at the highest level.
+          </p>
+        </div>
+
+        <!-- Col 2 -->
+        <div>
+          <p class="footer-col-heading">Products</p>
+          <nav class="footer-links" aria-label="Product links">
+            <a href="https://beacon.this.live"      target="_blank" rel="noopener">Beacon</a>
+            <a href="https://brokernomex.this.live" target="_blank" rel="noopener">Brokernomex</a>
+            <a href="https://crest.this.live"       target="_blank" rel="noopener">Crest</a>
+          </nav>
+        </div>
+
+        <!-- Col 3 -->
+        <div>
+          <p class="footer-built">Built with<br>intention.</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; 2026 this.live LLC &mdash; all rights reserved</p>
+        <p class="footer-copyright">Bryce Murad &amp; Darin Manley</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Scripts ─────────────────────────────────────────────────── -->
+  <script>
+    // ── Hamburger menu ───────────────────────────────────────────
+    const hamburger   = document.getElementById('hamburger');
+    const mobileMenu  = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Close mobile menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // ── Build pixel grid ────────────────────────────────────────
+    const grid = document.getElementById('pixel-grid');
+    for (let i = 0; i < 36; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'pixel-grid-cell';
+      grid.appendChild(cell);
+    }
+
+    // ── GSAP + ScrollTrigger ────────────────────────────────────
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero entrance — stagger in on load
+    const heroTl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.65 } });
+
+    heroTl
+      .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.55 }, 0.15)
+      .to('#hero-headline', { opacity: 1, y: 0 }, 0.35)
+      .to('#hero-sub',      { opacity: 1, y: 0 }, 0.55)
+      .to('#hero-buttons',  { opacity: 1, y: 0 }, 0.70);
+
+    // Set initial state for hero elements
+    gsap.set(['#hero-eyebrow', '#hero-headline', '#hero-sub', '#hero-buttons'], {
+      opacity: 0, y: 30
+    });
+
+    // Rebuild the timeline after setting initial state
+    heroTl.restart();
+
+    // Product cards — ScrollTrigger
+    gsap.from('#cards-grid .glass-card', {
+      opacity:  0,
+      y:        30,
+      scale:    0.97,
+      duration: 0.6,
+      stagger:  0.10,
+      ease:     'power2.out',
+      scrollTrigger: {
+        trigger: '#cards-grid',
+        start:   'top 80%',
+        once:    true,
+      },
+      onComplete: function() {
+        // Ensure final state is set explicitly (avoids flash on re-trigger)
+        document.querySelectorAll('#cards-grid .glass-card').forEach(el => {
+          el.style.opacity = '';
+          el.style.transform = '';
+        });
+      }
+    });
+
+    // About section — ScrollTrigger
+    gsap.from(['#about-headline', '#about-body'], {
+      opacity:  0,
+      y:        24,
+      duration: 0.6,
+      stagger:  0.12,
+      ease:     'power2.out',
+      scrollTrigger: {
+        trigger: '#about',
+        start:   'top 80%',
+        once:    true,
+      }
+    });
+
+    gsap.from('#pixel-grid', {
+      opacity:  0,
+      scale:    0.92,
+      duration: 0.7,
+      ease:     'power2.out',
+      scrollTrigger: {
+        trigger: '#pixel-grid',
+        start:   'top 85%',
+        once:    true,
+      }
+    });
+  </script>
+</body>
+</html>
