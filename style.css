@@ -123,7 +123,10 @@ body {
 .hero-logo-img {
   width: clamp(320px, 55vw, 600px);
   height: auto;
-  border-radius: 8px;
+  border-radius: 0;
+  mix-blend-mode: lighten;
+  filter: brightness(1.1);
+  object-fit: contain;
 }
 
 .hero-products-row {
@@ -328,10 +331,33 @@ body {
   margin-bottom: 12px;
   opacity: 0.9;
   transition: opacity 0.3s;
+  mix-blend-mode: lighten;
 }
 
 .card:hover .card-logo {
   opacity: 1;
+}
+
+/* Placeholder tile for coming-soon products */
+.card-logo-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.card-logo-placeholder--bnx {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(59, 130, 246, 0.04));
+  border-color: rgba(99, 102, 241, 0.12);
+}
+
+.card-tagline--bnx {
+  color: #6366f1;
 }
 
 .card h3 {
