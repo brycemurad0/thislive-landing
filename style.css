@@ -116,11 +116,11 @@ body {
 .hero-title {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: clamp(56px, 10vw, 110px);
+  font-size: clamp(72px, 14vw, 160px);
   color: var(--text);
   letter-spacing: -0.03em;
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .hero-dot {
@@ -760,7 +760,7 @@ body {
   .nav { padding: 0 16px; }
   .container { padding: 0 16px; }
   .hero { padding: 100px 0 64px; }
-  .hero-title { font-size: 48px; }
+  .hero-title { font-size: 56px; }
   .hero-subtitle { font-size: 14px; letter-spacing: 0.1em; }
   .cards, .cards--4col { grid-template-columns: 1fr; }
   .lead-tiles { grid-template-columns: 1fr; }
