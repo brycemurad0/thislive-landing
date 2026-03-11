@@ -732,3 +732,32 @@ body {
   .section { padding: 56px 0; }
   .demo { padding: 56px 0; }
 }
+
+/* Social links */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+}
+.social-links a {
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.social-links a:hover {
+  color: #00d4ff;
+  transform: translateY(-2px);
+}
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+.footer-social a {
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.2s ease;
+}
+.footer-social a:hover {
+  color: #00d4ff;
+}
