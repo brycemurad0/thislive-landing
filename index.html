@@ -42,8 +42,14 @@
     <canvas id="hero-particles" class="hero-particles" aria-hidden="true"></canvas>
     <div class="container hero-content hero-banner">
 
-      <div class="hero-logo-block">
-        <img src="img/thislive-logo.jpg" alt="this.live" class="hero-logo-img">
+      <div class="hero-logo-inline">
+        <svg class="hero-pulse-icon" width="48" height="32" viewBox="0 0 48 32" fill="none" aria-hidden="true">
+          <path d="M0 20h12l3-14 4 28 4-20 3 6h22" stroke="url(#pulse-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="48" cy="20" r="3" fill="#00D4FF" opacity="0.9"/>
+          <circle cx="48" cy="20" r="6" fill="#00D4FF" opacity="0.2"/>
+          <defs><linearGradient id="pulse-grad" x1="0" y1="16" x2="48" y2="16"><stop offset="0" stop-color="#00D4FF" stop-opacity="0.3"/><stop offset="1" stop-color="#00D4FF"/></linearGradient></defs>
+        </svg>
+        <span class="hero-logo-text">this.live</span>
       </div>
 
       <!-- Products row -->
@@ -53,14 +59,19 @@
           Beacon
         </a>
         <span class="hero-product-sep">|</span>
+        <a href="#products" class="hero-product" data-product="maestro-lite">
+          <span class="hero-product-dot hero-product-dot--lite"></span>
+          Maestro-lite
+        </a>
+        <span class="hero-product-sep">|</span>
         <a href="#products" class="hero-product" data-product="maestro">
           <span class="hero-product-dot hero-product-dot--maestro"></span>
           Maestro
         </a>
         <span class="hero-product-sep">|</span>
-        <a href="#products" class="hero-product" data-product="maestro-lite">
-          <span class="hero-product-dot hero-product-dot--lite"></span>
-          Maestro-lite
+        <a href="#products" class="hero-product" data-product="bnx">
+          <span class="hero-product-dot hero-product-dot--bnx"></span>
+          Brokernomex
         </a>
       </div>
 
@@ -77,38 +88,71 @@
   <section id="products" class="section">
     <div class="container">
       <h2 class="section-title">Products</h2>
-      <div class="cards">
+      <div class="cards cards--4col">
 
+        <!-- 1. BEACON (Live) -->
         <div class="card card--beacon">
-          <img src="img/beacon-logo.jpg" alt="Beacon" class="card-logo">
+          <div class="card-icon-wrap card-icon-wrap--beacon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#00D4FF" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="12" cy="12" r="4" stroke="#00D4FF" stroke-width="1.8" fill="rgba(0,212,255,0.1)"/>
+            </svg>
+          </div>
           <span class="badge badge-live">Live</span>
           <h3>Beacon</h3>
-          <p class="card-tagline">Find the businesses nobody else is calling.</p>
-          <p>AI-powered lead generation for local service businesses. Search any niche and location, find businesses with no online presence, and get a custom demo website generated before you ever make contact. 10 million US businesses have no website. Beacon helps you reach them first.</p>
+          <p class="card-tagline card-tagline--beacon">Find the businesses nobody else is calling.</p>
+          <p>AI-powered lead generation for local service businesses. Search any niche and location, find businesses with no online presence, and get a custom demo website generated before you ever make contact.</p>
           <a href="https://beacon.this.live" class="btn btn-primary" target="_blank" rel="noopener">Launch Beacon</a>
         </div>
 
+        <!-- 2. MAESTRO-LITE -->
+        <div class="card card--infra">
+          <div class="card-icon-wrap card-icon-wrap--lite">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="16" rx="3" stroke="#6B8AFF" stroke-width="1.8" fill="rgba(107,138,255,0.08)"/>
+              <circle cx="9" cy="11" r="1.5" fill="#6B8AFF"/>
+              <circle cx="15" cy="11" r="1.5" fill="#6B8AFF"/>
+              <path d="M9.5 15.5c0 0 1.25 1.5 2.5 1.5s2.5-1.5 2.5-1.5" stroke="#6B8AFF" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="8" y1="6" x2="8" y2="4" stroke="#6B8AFF" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16" y1="6" x2="16" y2="4" stroke="#6B8AFF" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="badge badge-dev">In Dev</span>
+          <h3>Maestro-lite</h3>
+          <p class="card-tagline card-tagline--lite">Your own AI agent node. One click.</p>
+          <p>Deploy production-grade AI agent infrastructure on dedicated hardware. Private, secure, and built for teams that need to run AI workloads without sending data to third parties.</p>
+          <span class="btn btn-disabled">Coming Soon</span>
+        </div>
+
+        <!-- 3. MAESTRO -->
+        <div class="card card--maestro">
+          <div class="card-icon-wrap card-icon-wrap--maestro">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(139,92,246,0.08)"/>
+              <path d="M2 17l10 5 10-5" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12l10 5 10-5" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+            </svg>
+          </div>
+          <span class="badge badge-dev">In Dev</span>
+          <h3>Maestro</h3>
+          <p class="card-tagline card-tagline--maestro">Route smarter. Scale faster.</p>
+          <p>An intelligent LLM routing layer that picks the right model for every task. Local or cloud, fast or deep. Built for teams who want AI infrastructure that learns and optimizes itself.</p>
+          <span class="btn btn-disabled">Coming Soon</span>
+        </div>
+
+        <!-- 4. BROKERNOMEX -->
         <div class="card card--bnx">
-          <div class="card-logo-placeholder card-logo-placeholder--bnx">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <polyline points="3,17 8,11 13,14 21,5" stroke="rgba(99,102,241,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <polyline points="16,5 21,5 21,10" stroke="rgba(99,102,241,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="3" y1="21" x2="21" y2="21" stroke="rgba(99,102,241,0.3)" stroke-width="1.2" stroke-linecap="round"/>
+          <div class="card-icon-wrap card-icon-wrap--bnx">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <polyline points="3,17 8,11 13,14 21,5" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="16,5 21,5 21,10" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="3" y1="21" x2="21" y2="21" stroke="#3B82F6" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
             </svg>
           </div>
           <span class="badge badge-soon">Coming Soon</span>
           <h3>Brokernomex</h3>
           <p class="card-tagline card-tagline--bnx">Agentic trading infrastructure.</p>
-          <p>A self-learning trading platform. Connect your brokerage, deploy strategies, and let autonomous agents trade, review, and improve. Built for operators who want systematic edge without the manual overhead.</p>
-          <span class="btn btn-disabled">Coming Soon</span>
-        </div>
-
-        <div class="card card--infra">
-          <img src="img/maestro-lite-logo.jpg" alt="Maestro-lite" class="card-logo">
-          <span class="badge badge-soon">Coming Soon</span>
-          <h3>Maestro-lite</h3>
-          <p class="card-tagline">Your own AI agent node. One click.</p>
-          <p>Deploy production-grade AI agent infrastructure on dedicated hardware. Private, secure, and built for teams that need to run AI workloads without sending data to third parties.</p>
+          <p>A self-learning trading platform. Connect your brokerage, deploy strategies, and let autonomous agents trade, review, and improve. Built for operators who want systematic edge.</p>
           <span class="btn btn-disabled">Coming Soon</span>
         </div>
 
