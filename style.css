@@ -282,8 +282,12 @@ body {
   background: rgba(0, 212, 255, 0.08);
 }
 
+.about-founder-wrap {
+  text-align: center;
+  margin-top: 40px;
+}
+
 .about-founder-link {
-  margin-top: 24px;
   display: inline-block;
 }
 
