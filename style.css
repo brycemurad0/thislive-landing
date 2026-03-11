@@ -99,6 +99,94 @@ body {
   overflow: hidden;
 }
 
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-banner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-logo-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.hero-logo-img {
+  width: clamp(320px, 55vw, 600px);
+  height: auto;
+  border-radius: 8px;
+}
+
+.hero-products-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-product {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.hero-product:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.hero-product-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: box-shadow 0.3s;
+}
+
+.hero-product-dot--beacon { background: var(--accent); }
+.hero-product-dot--maestro { background: #6366f1; }
+.hero-product-dot--lite { background: #b3bfe5; }
+
+.hero-product:hover .hero-product-dot--beacon { box-shadow: 0 0 12px var(--accent-glow); }
+.hero-product:hover .hero-product-dot--maestro { box-shadow: 0 0 12px rgba(99, 102, 241, 0.5); }
+.hero-product:hover .hero-product-dot--lite { box-shadow: 0 0 12px rgba(179, 191, 229, 0.5); }
+
+.hero-product-sep {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.hero-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  color: rgba(0, 212, 255, 0.6);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-bottom: 40px;
+}
+
+.hero-cta {
+  margin-top: 0;
+}
+
 .hero-orb {
   position: absolute;
   border-radius: 50%;
@@ -232,6 +320,19 @@ body {
 .card--beacon:hover { box-shadow: 0 0 40px rgba(0, 212, 255, 0.15); }
 .card--bnx:hover { box-shadow: 0 0 40px rgba(139, 92, 246, 0.15); }
 .card--infra:hover { box-shadow: 0 0 40px rgba(59, 130, 246, 0.15); }
+
+.card-logo {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+
+.card:hover .card-logo {
+  opacity: 1;
+}
 
 .card h3 {
   font-family: 'Space Grotesk', sans-serif;

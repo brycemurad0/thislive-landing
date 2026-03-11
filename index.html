@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>this.live — AI Software Studio</title>
-  <meta name="description" content="this.live LLC is an AI software studio. We design, build, and ship production-grade products for operators and businesses.">
-  <meta property="og:title" content="this.live — AI Software Studio">
-  <meta property="og:description" content="Production-grade AI software for operators and businesses. Beacon is live.">
+  <title>this.live — Software with Agency</title>
+  <meta name="description" content="this.live builds agent-native software and infrastructure. The future of software has agency.">
+  <meta property="og:title" content="this.live — Software with Agency">
+  <meta property="og:description" content="Agent-native software and infrastructure. Beacon, Maestro, Maestro-lite.">
   <meta property="og:url" content="https://this.live">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://this.live/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="this.live — AI Software Studio">
-  <meta name="twitter:description" content="Production-grade AI software for operators and businesses.">
+  <meta name="twitter:title" content="this.live — Software with Agency">
+  <meta name="twitter:description" content="Agent-native software and infrastructure. The future of software has agency.">
   <meta name="twitter:image" content="https://this.live/og-image.png">
   <link rel="icon" type="image/png" href="/favicon.png?v=2">
   <link rel="apple-touch-icon" href="/icon-180.png">
@@ -39,11 +39,35 @@
   <section class="hero">
     <div class="hero-orb hero-orb--blue" aria-hidden="true"></div>
     <div class="hero-orb hero-orb--cyan" aria-hidden="true"></div>
-    <div class="container hero-content">
-      <p class="hero-eyebrow">AI Software Studio</p>
-      <h1>Production-grade software<br>for operators and businesses.</h1>
-      <p class="hero-desc">this.live designs, builds, and ships AI-powered products built to work at scale on day one. Every product we release solves a real problem with real infrastructure behind it.</p>
-      <a href="#products" class="btn btn-primary">See Our Products</a>
+    <canvas id="hero-particles" class="hero-particles" aria-hidden="true"></canvas>
+    <div class="container hero-content hero-banner">
+
+      <div class="hero-logo-block">
+        <img src="img/thislive-logo.jpg" alt="this.live" class="hero-logo-img">
+      </div>
+
+      <!-- Products row -->
+      <div class="hero-products-row">
+        <a href="#products" class="hero-product" data-product="beacon">
+          <span class="hero-product-dot hero-product-dot--beacon"></span>
+          Beacon
+        </a>
+        <span class="hero-product-sep">|</span>
+        <a href="#products" class="hero-product" data-product="maestro">
+          <span class="hero-product-dot hero-product-dot--maestro"></span>
+          Maestro
+        </a>
+        <span class="hero-product-sep">|</span>
+        <a href="#products" class="hero-product" data-product="maestro-lite">
+          <span class="hero-product-dot hero-product-dot--lite"></span>
+          Maestro-lite
+        </a>
+      </div>
+
+      <!-- Tagline -->
+      <p class="hero-tagline">The future of software has agency.</p>
+
+      <a href="#products" class="btn btn-primary hero-cta">See Our Products</a>
     </div>
   </section>
 
@@ -56,6 +80,7 @@
       <div class="cards">
 
         <div class="card card--beacon">
+          <img src="img/beacon-logo.jpg" alt="Beacon" class="card-logo">
           <span class="badge badge-live">Live</span>
           <h3>Beacon</h3>
           <p class="card-tagline">Find the businesses nobody else is calling.</p>
@@ -64,6 +89,7 @@
         </div>
 
         <div class="card card--bnx">
+          <img src="img/maestro-logo.jpg" alt="Maestro" class="card-logo">
           <span class="badge badge-soon">Coming Soon</span>
           <h3>Brokernomex</h3>
           <p class="card-tagline">Agentic trading infrastructure.</p>
@@ -72,9 +98,10 @@
         </div>
 
         <div class="card card--infra">
+          <img src="img/maestro-lite-logo.jpg" alt="Maestro-lite" class="card-logo">
           <span class="badge badge-soon">Coming Soon</span>
-          <h3>AI Infrastructure</h3>
-          <p class="card-tagline">Your own AI agent network. One click.</p>
+          <h3>Maestro-lite</h3>
+          <p class="card-tagline">Your own AI agent node. One click.</p>
           <p>Deploy production-grade AI agent infrastructure on dedicated hardware. Private, secure, and built for teams that need to run AI workloads without sending data to third parties.</p>
           <span class="btn btn-disabled">Coming Soon</span>
         </div>
@@ -198,7 +225,7 @@
   <section id="about" class="section">
     <div class="container">
       <h2 class="section-title">About</h2>
-      <p class="about-text">this.live LLC is an AI software studio based in the United States. We design, build, and ship production-grade products for operators, traders, and businesses that need software built to work at scale. Every product we release runs on dedicated infrastructure with enterprise-grade security and reliability.</p>
+      <p class="about-text">this.live LLC builds agent-native software and infrastructure. We don't bolt AI onto existing software categories. We rethink what becomes possible when agents operate autonomously. Every product starts from that question. Every product runs on dedicated infrastructure with enterprise-grade security and reliability.</p>
     </div>
   </section>
 
@@ -211,6 +238,88 @@
       <p class="contact-text">Get in touch at <a href="mailto:hello@mail.this.live">hello@mail.this.live</a></p>
     </div>
   </section>
+
+  <script>
+    // Particle background
+    (function() {
+      const canvas = document.getElementById('hero-particles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w, h, particles = [];
+
+      function resize() {
+        const hero = canvas.parentElement;
+        w = canvas.width = hero.offsetWidth;
+        h = canvas.height = hero.offsetHeight;
+      }
+
+      function createParticles() {
+        particles = [];
+        const count = Math.floor((w * h) / 12000);
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            r: Math.random() * 1.5 + 0.5,
+            dx: (Math.random() - 0.5) * 0.3,
+            dy: (Math.random() - 0.5) * 0.3,
+            o: Math.random() * 0.4 + 0.1
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (const p of particles) {
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0) p.x = w;
+          if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h;
+          if (p.y > h) p.y = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0, 212, 255, ${p.o})`;
+          ctx.fill();
+        }
+        // Draw connections
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(0, 212, 255, ${0.06 * (1 - dist / 100)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      createParticles();
+      draw();
+      window.addEventListener('resize', () => { resize(); createParticles(); });
+    })();
+
+    // Pulse line draw animation
+    (function() {
+      const path = document.querySelector('.pulse-line');
+      if (!path) return;
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = len;
+      path.style.strokeDashoffset = len;
+      setTimeout(() => {
+        path.style.transition = 'stroke-dashoffset 1.5s ease-out';
+        path.style.strokeDashoffset = '0';
+      }, 300);
+    })();
+  </script>
 
   <footer class="footer">
     <div class="container footer-inner">
