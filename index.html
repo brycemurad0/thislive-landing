@@ -1,590 +1,227 @@
 <!DOCTYPE html>
-<html lang="en" style="scroll-behavior: smooth;">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="this.live LLC -- a software publishing house. One standard: ship something real." />
-  <title>this.live -- Software Publishing</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            void:    '#0a0a0a',
-            space:   '#0f172a',
-            surface: '#1e293b',
-            cyan:    { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2' },
-            violet:  { 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' },
-            crimson: { 400: '#f87171', 500: '#ef4444', 600: '#dc2626' },
-            blue:    { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' },
-          },
-          fontFamily: {
-            sans:    ['Inter', 'sans-serif'],
-            display: ['Space Grotesk', 'sans-serif'],
-            mono:    ['JetBrains Mono', 'monospace'],
-          },
-        },
-      },
-    }
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <style>
-    :root {
-      --void:           #0a0a0a;
-      --space:          #0f172a;
-      --surface:        #1e293b;
-      --glass:          rgba(255,255,255,0.04);
-      --glass-hover:    rgba(255,255,255,0.07);
-      --border:         rgba(255,255,255,0.08);
-      --border-bright:  rgba(255,255,255,0.15);
-      --text-bright:    #f8fafc;
-      --text-body:      rgba(255,255,255,0.65);
-      --text-muted:     rgba(255,255,255,0.40);
-      --text-subtle:    rgba(255,255,255,0.25);
-      --accent-1:       #06b6d4;
-      --accent-2:       #8b5cf6;
-      --accent-glow:    rgba(6,182,212,0.30);
-      --beacon-accent:       #06b6d4;
-      --beacon-glow:         rgba(6,182,212,0.35);
-      --maestro-accent:      #8b5cf6;
-      --maestro-glow:        rgba(139,92,246,0.35);
-      --brokernomex-accent:  #3b82f6;
-      --brokernomex-glow:    rgba(59,130,246,0.35);
-      --crest-accent:        #ef4444;
-      --crest-glow:          rgba(239,68,68,0.35);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { background: var(--void); }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--void);
-      color: var(--text-body);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .grain-overlay {
-      position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-repeat: repeat; background-size: 200px 200px;
-    }
-
-    .nav {
-      position: sticky; top: 0; z-index: 100; height: 72px;
-      background: rgba(10,10,10,0.80); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px;
-    }
-    .nav-inner { max-width: 1200px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, var(--beacon-accent), var(--maestro-accent)); flex-shrink: 0; }
-    .nav-logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 18px; color: var(--text-bright); letter-spacing: -0.01em; }
-    .nav-links { display: flex; align-items: center; gap: 36px; }
-    .nav-links a { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.60); text-decoration: none; transition: color 0.2s ease; }
-    .nav-links a:hover, .nav-links a:focus { color: var(--beacon-accent); outline: none; }
-
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-    .hamburger span { display: block; width: 22px; height: 2px; background: rgba(255,255,255,0.70); border-radius: 2px; transition: transform 0.25s ease, opacity 0.25s ease; }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    .mobile-menu {
-      display: none; position: fixed; top: 72px; left: 0; right: 0;
-      background: rgba(10,10,10,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border); padding: 20px 32px 24px; z-index: 99; flex-direction: column; gap: 4px;
-    }
-    .mobile-menu.open { display: flex; }
-    .mobile-menu a { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.70); text-decoration: none; padding: 12px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
-    .mobile-menu a:last-child { border-bottom: none; }
-    .mobile-menu a:hover { color: var(--beacon-accent); }
-
-    .hero { position: relative; min-height: 100vh; background: var(--void); display: flex; align-items: center; overflow: hidden; }
-    .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(120px); }
-    .hero-orb--cyan { width: 600px; height: 600px; background: rgba(6,182,212,0.12); top: -100px; right: -150px; animation: orb-drift-1 14s ease-in-out infinite alternate; }
-    .hero-orb--violet { width: 500px; height: 500px; background: rgba(139,92,246,0.10); bottom: -80px; left: -120px; animation: orb-drift-2 16s ease-in-out infinite alternate; }
-    .hero-orb--crimson { width: 400px; height: 400px; background: rgba(239,68,68,0.07); top: 30%; right: 25%; animation: orb-drift-3 18s ease-in-out infinite alternate; }
-
-    @keyframes orb-drift-1 { from { transform: translate(0,0) scale(1); } to { transform: translate(-60px,50px) scale(1.12); } }
-    @keyframes orb-drift-2 { from { transform: translate(0,0) scale(1); } to { transform: translate(50px,-40px) scale(1.10); } }
-    @keyframes orb-drift-3 { from { transform: translate(0,0) scale(1); } to { transform: translate(40px,60px) scale(1.08); } }
-
-    .hero-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 32px; width: 100%; }
-    .hero-eyebrow { display: inline-block; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; background: linear-gradient(135deg, var(--beacon-accent), var(--maestro-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; opacity: 0; }
-    .hero-headline { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(40px,6vw,72px); color: var(--text-bright); line-height: 1.08; letter-spacing: -0.025em; max-width: 720px; margin-bottom: 24px; opacity: 0; }
-    .hero-sub { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 18px; color: var(--text-body); line-height: 1.65; max-width: 540px; margin-bottom: 40px; opacity: 0; }
-    .hero-buttons { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; opacity: 0; }
-
-    .btn-primary { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--beacon-accent), var(--maestro-accent)); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--maestro-accent), var(--beacon-accent)); opacity: 0; transition: opacity 0.3s ease; }
-    .btn-primary span { position: relative; z-index: 1; }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(6,182,212,0.30), 0 4px 16px rgba(139,92,246,0.25); }
-    .btn-primary:hover::before { opacity: 1; }
-
-    .btn-ghost { background: transparent; color: var(--text-bright); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 13px 28px; font-size: 14px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
-    .btn-ghost:hover { background: var(--glass); border-color: var(--beacon-accent); box-shadow: 0 0 20px rgba(6,182,212,0.15); }
-
-    .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 1; }
-    .scroll-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); animation: scroll-bounce 2.2s ease-in-out infinite; }
-    .scroll-line { width: 1px; height: 32px; background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent); }
-    @keyframes scroll-bounce { 0%, 100% { transform: translateY(0); opacity: 0.35; } 50% { transform: translateY(8px); opacity: 0.70; } }
-
-    .section-eyebrow { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--beacon-accent); margin-bottom: 16px; display: block; }
-    .section-headline { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(32px,4vw,48px); color: var(--text-bright); letter-spacing: -0.02em; line-height: 1.15; }
-
-    .products { background: var(--space); padding: 120px 0; }
-    .products-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-    .products-header { margin-bottom: 64px; }
-    .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-
-    .glass-card {
-      position: relative; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; opacity: 0;
-    }
-    .glass-card:hover { background: var(--glass-hover); border-color: var(--border-bright); transform: translateY(-4px); }
-    .glass-card--beacon:hover      { box-shadow: 0 0 48px rgba(6,182,212,0.22),   0 8px 32px rgba(0,0,0,0.4); }
-    .glass-card--maestro:hover     { box-shadow: 0 0 48px rgba(139,92,246,0.22),  0 8px 32px rgba(0,0,0,0.4); }
-    .glass-card--brokernomex:hover { box-shadow: 0 0 48px rgba(59,130,246,0.22),  0 8px 32px rgba(0,0,0,0.4); }
-    .glass-card--crest:hover       { box-shadow: 0 0 48px rgba(239,68,68,0.22),   0 8px 32px rgba(0,0,0,0.4); }
-
-    .card-accent-bar { height: 3px; width: 100%; flex-shrink: 0; }
-    .card-accent-bar--beacon      { background: linear-gradient(90deg, #06b6d4, transparent); }
-    .card-accent-bar--maestro     { background: linear-gradient(90deg, #8b5cf6, transparent); }
-    .card-accent-bar--brokernomex { background: linear-gradient(90deg, #3b82f6, transparent); }
-    .card-accent-bar--crest       { background: linear-gradient(90deg, #ef4444, transparent); }
-
-    .card-body { padding: 28px 32px 32px; display: flex; flex-direction: column; flex: 1; }
-    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .card-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--glass); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; font-family: 'Inter', sans-serif; letter-spacing: 0.03em; }
-    .badge--live { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.30); }
-    .badge--dev { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.30); }
-    .badge--soon { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.50); border: 1px solid rgba(255,255,255,0.10); }
-    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-    .badge--live .badge-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-    .card-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 24px; color: var(--text-bright); margin-bottom: 6px; letter-spacing: -0.01em; }
-    .card-tagline { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; margin-bottom: 16px; }
-    .card-tagline--beacon      { color: var(--beacon-accent); }
-    .card-tagline--maestro     { color: var(--maestro-accent); }
-    .card-tagline--brokernomex { color: var(--brokernomex-accent); }
-    .card-tagline--crest       { color: var(--crest-accent); }
-
-    .card-description { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: var(--text-body); line-height: 1.65; flex: 1; margin-bottom: 28px; }
-
-    .card-cta { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; text-decoration: none; transition: opacity 0.2s ease; display: inline-flex; align-items: center; gap: 4px; margin-top: auto; }
-    .card-cta--beacon      { color: var(--beacon-accent); }
-    .card-cta:hover { text-decoration: underline; opacity: 0.80; }
-    .card-cta-muted { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; color: var(--text-muted); margin-top: auto; }
-
-    .gradient-sep { height: 1px; background: linear-gradient(90deg, transparent, rgba(6,182,212,0.30), rgba(139,92,246,0.30), transparent); }
-
-    .about { background: var(--void); padding: 120px 0; }
-    .about-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .about-headline { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(28px,3.5vw,40px); color: var(--text-bright); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 24px; }
-    .about-body { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 16px; color: var(--text-body); line-height: 1.75; }
-
-    .pixel-grid { display: grid; grid-template-columns: repeat(6, 20px); grid-template-rows: repeat(6, 20px); gap: 4px; justify-self: center; }
-    .pixel-grid-cell { width: 20px; height: 20px; background: rgba(255,255,255,0.06); border-radius: 3px; transition: background 0.15s ease, box-shadow 0.15s ease; cursor: default; }
-    .pixel-grid-cell:hover { background: rgba(6,182,212,0.50); box-shadow: 0 0 10px rgba(6,182,212,0.40); }
-
-    .founders { background: var(--space); padding: 120px 0; }
-    .founders-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-    .founders-header { margin-bottom: 64px; }
-    .founders-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
-
-    .founder-card {
-      background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 40px;
-      display: flex; flex-direction: column; align-items: center; text-align: center;
-      transition: background 0.25s ease, border-color 0.25s ease;
-    }
-    .founder-card:hover { background: var(--glass-hover); border-color: var(--border-bright); }
-
-    .founder-avatar {
-      width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 20px; margin-bottom: 24px; flex-shrink: 0;
-    }
-    .founder-avatar--bryce { background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3); color: #06b6d4; }
-    .founder-avatar--darin { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); color: #8b5cf6; }
-
-    .founder-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 22px; color: var(--text-bright); margin-bottom: 4px; }
-    .founder-title { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
-    .founder-bio { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--text-body); line-height: 1.65; margin-bottom: 20px; max-width: 400px; }
-    .founder-email { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--beacon-accent); text-decoration: none; transition: opacity 0.2s; }
-    .founder-email:hover { opacity: 0.75; }
-    .founder-email--violet { color: var(--maestro-accent); }
-
-    .contact { background: var(--void); padding: 120px 0; }
-    .contact-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-    .contact-header { margin-bottom: 16px; }
-    .contact-sub { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--text-muted); margin-bottom: 48px; }
-    .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-    .contact-card {
-      background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 32px;
-      text-decoration: none; display: flex; flex-direction: column; gap: 8px;
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-    }
-    .contact-card:hover { background: var(--glass-hover); border-color: var(--border-bright); transform: translateY(-2px); }
-    .contact-label { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-muted); }
-    .contact-email { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text-bright); }
-
-    .footer { background: var(--void); border-top: 1px solid var(--border); padding: 64px 0 0; }
-    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-    .footer-cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
-    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; text-decoration: none; }
-    .footer-logo-dot { width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, var(--beacon-accent), var(--maestro-accent)); }
-    .footer-logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 16px; color: var(--text-bright); }
-    .footer-tagline { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 280px; }
-    .footer-col-heading { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 20px; }
-    .footer-links { display: flex; flex-direction: column; gap: 12px; }
-    .footer-links a { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; }
-    .footer-links a:hover { color: var(--beacon-accent); }
-    .footer-bottom { border-top: 1px solid var(--border); padding: 20px 0; display: flex; align-items: center; justify-content: space-between; }
-    .footer-copyright { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text-muted); }
-
-    @media (max-width: 768px) {
-      .nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .hero-content { padding: 0 20px; }
-      .hero-buttons { gap: 12px; }
-      .products { padding: 80px 0; }
-      .products-inner { padding: 0 20px; }
-      .cards-grid { grid-template-columns: 1fr; }
-      .products-header { margin-bottom: 40px; }
-      .about { padding: 80px 0; }
-      .about-inner { grid-template-columns: 1fr; gap: 52px; padding: 0 20px; }
-      .pixel-grid { justify-self: start; }
-      .founders { padding: 80px 0; }
-      .founders-inner { padding: 0 20px; }
-      .founders-grid { grid-template-columns: 1fr; }
-      .contact { padding: 80px 0; }
-      .contact-inner { padding: 0 20px; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .footer-inner { padding: 0 20px; }
-      .footer-cols { grid-template-columns: 1fr; gap: 36px; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>this.live — AI Software Studio</title>
+  <meta name="description" content="this.live LLC is an AI software studio. We design, build, and ship production-grade products for operators and businesses.">
+  <meta property="og:title" content="this.live — AI Software Studio">
+  <meta property="og:description" content="Production-grade AI software for operators and businesses. Beacon is live.">
+  <meta property="og:url" content="https://this.live">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://this.live/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="this.live — AI Software Studio">
+  <meta name="twitter:description" content="Production-grade AI software for operators and businesses.">
+  <meta name="twitter:image" content="https://this.live/og-image.png">
+  <link rel="icon" type="image/png" href="/favicon.png?v=2">
+  <link rel="apple-touch-icon" href="/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="grain-overlay" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <nav class="nav" role="navigation" aria-label="Main navigation">
+  <nav class="nav">
     <div class="nav-inner">
-      <a href="#" class="nav-logo" aria-label="this.live -- home">
-        <div class="nav-logo-dot" aria-hidden="true"></div>
-        <span class="nav-logo-text">this.live</span>
-      </a>
-      <div class="nav-links" id="nav-links">
+      <a href="#" class="logo">this.live</a>
+      <div class="nav-links">
         <a href="#products">Products</a>
-        <a href="#founders">Founders</a>
+        <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </div>
-      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </nav>
 
-  <div class="mobile-menu" id="mobile-menu" role="menu">
-    <a href="#products" role="menuitem">Products</a>
-    <a href="#founders" role="menuitem">Founders</a>
-    <a href="#contact" role="menuitem">Contact</a>
-  </div>
-
-  <section class="hero" id="hero" aria-label="Hero">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb hero-orb--blue" aria-hidden="true"></div>
     <div class="hero-orb hero-orb--cyan" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb--violet" aria-hidden="true"></div>
-    <div class="hero-orb hero-orb--crimson" aria-hidden="true"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow" id="hero-eyebrow">Software Publishing</p>
-      <h1 class="hero-headline" id="hero-headline">We build tools<br>that move fast.</h1>
-      <p class="hero-sub" id="hero-sub">this.live publishes software for people who mean business. One standard: ship something real.</p>
-      <div class="hero-buttons" id="hero-buttons">
-        <a href="#products" class="btn-primary"><span>See our products</span></a>
-        <a href="#about" class="btn-ghost">Learn more</a>
-      </div>
-    </div>
-    <div class="scroll-indicator" aria-hidden="true">
-      <div class="scroll-dot"></div>
-      <div class="scroll-line"></div>
+    <div class="container hero-content">
+      <p class="hero-eyebrow">AI Software Studio</p>
+      <h1>Production-grade software<br>for operators and businesses.</h1>
+      <p class="hero-desc">this.live designs, builds, and ships AI-powered products built to work at scale on day one. Every product we release solves a real problem with real infrastructure behind it.</p>
+      <a href="#products" class="btn btn-primary">See Our Products</a>
     </div>
   </section>
 
-  <section class="products" id="products" aria-label="Products">
-    <div class="products-inner">
-      <div class="products-header">
-        <span class="section-eyebrow">What We Build</span>
-        <h2 class="section-headline">Built to ship. Built to grow.</h2>
-      </div>
-      <div class="cards-grid" id="cards-grid">
+  <div class="sep"></div>
 
-        <article class="glass-card glass-card--beacon">
-          <div class="card-accent-bar card-accent-bar--beacon"></div>
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M5 12.55a11 11 0 0 1 14.08 0" stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M1.42 9a16 16 0 0 1 21.16 0" stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.50"/>
-                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke="#06b6d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="12" cy="20" r="1.2" fill="#06b6d4"/>
-                </svg>
-              </div>
-              <span class="badge badge--live"><span class="badge-dot"></span>Live Now</span>
-            </div>
-            <h3 class="card-title">Beacon</h3>
-            <p class="card-tagline card-tagline--beacon">Your business, found.</p>
-            <p class="card-description">AI-powered lead generation for contractors. Surfaces qualified prospects, automates outreach, fills your pipeline.</p>
-            <a href="https://beacon.this.live" class="card-cta card-cta--beacon" target="_blank" rel="noopener">Beacon &rarr;</a>
+  <!-- PRODUCTS -->
+  <section id="products" class="section">
+    <div class="container">
+      <h2 class="section-title">Products</h2>
+      <div class="cards">
+
+        <div class="card card--beacon">
+          <span class="badge badge-live">Live</span>
+          <h3>Beacon</h3>
+          <p class="card-tagline">Find the businesses nobody else is calling.</p>
+          <p>AI-powered lead generation for local service businesses. Search any niche and location, find businesses with no online presence, and get a custom demo website generated before you ever make contact. 10 million US businesses have no website. Beacon helps you reach them first.</p>
+          <a href="https://beacon.this.live" class="btn btn-primary" target="_blank" rel="noopener">Launch Beacon</a>
+        </div>
+
+        <div class="card card--bnx">
+          <span class="badge badge-soon">Coming Soon</span>
+          <h3>Brokernomex</h3>
+          <p class="card-tagline">Agentic trading infrastructure.</p>
+          <p>A self-learning trading platform. Connect your brokerage, deploy strategies, and let autonomous agents trade, review, and improve. Built for operators who want systematic edge without the manual overhead.</p>
+          <a href="mailto:hello@mail.this.live?subject=Brokernomex%20Waitlist" class="btn btn-outline">Join Waitlist</a>
+        </div>
+
+        <div class="card card--infra">
+          <span class="badge badge-soon">Coming Soon</span>
+          <h3>AI Infrastructure</h3>
+          <p class="card-tagline">Your own AI agent network. One click.</p>
+          <p>Deploy production-grade AI agent infrastructure on dedicated hardware. Private, secure, and built for teams that need to run AI workloads without sending data to third parties.</p>
+          <span class="btn btn-disabled">Coming Soon</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="sep"></div>
+
+  <!-- BEACON DEMO -->
+  <section class="demo">
+    <div class="container">
+      <div class="demo-header">
+        <h2>See Beacon in action</h2>
+        <p class="demo-desc">Search any niche and location. Beacon finds businesses with no digital presence and gives you everything you need to reach them -- contact info, qualifying signals, and a custom demo website you can send before your first call.</p>
+      </div>
+
+      <div class="demo-window">
+        <div class="demo-toolbar">
+          <span class="demo-dot"></span>
+          <span class="demo-dot"></span>
+          <span class="demo-dot"></span>
+          <span class="demo-url">beacon.this.live</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-search-bar">
+            <span class="demo-search-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span>
+            <span class="demo-search-text">Plumbers -- New Haven, CT</span>
+            <span class="demo-badge-results">12 leads found</span>
           </div>
-        </article>
+          <div class="lead-tiles">
 
-        <article class="glass-card glass-card--maestro">
-          <div class="card-accent-bar card-accent-bar--maestro"></div>
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M2 17l10 5 10-5" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M2 12l10 5 10-5" stroke="#8b5cf6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.50"/>
-                </svg>
+            <div class="lead-tile">
+              <div class="lead-tile__header">
+                <div class="lead-tile__avatar">RP</div>
+                <div class="lead-tile__meta">
+                  <span class="lead-tile__name">R&amp;P Plumbing</span>
+                  <span class="lead-tile__location">East Haven, CT</span>
+                </div>
+                <span class="lead-tile__score score-high">No website</span>
               </div>
-              <span class="badge badge--dev"><span class="badge-dot"></span>In Development</span>
-            </div>
-            <h3 class="card-title">Maestro</h3>
-            <p class="card-tagline card-tagline--maestro">Route smarter. Scale faster.</p>
-            <p class="card-description">An intelligent LLM routing layer that picks the right model for every task -- local or cloud, fast or deep. Built for teams who want AI infrastructure that learns.</p>
-            <span class="card-cta-muted">Coming soon</span>
-          </div>
-        </article>
-
-        <article class="glass-card glass-card--brokernomex">
-          <div class="card-accent-bar card-accent-bar--brokernomex"></div>
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <polyline points="3,17 8,11 13,14 21,5" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="16,5 21,5 21,10" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <line x1="3" y1="21" x2="21" y2="21" stroke="#3b82f6" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/>
-                </svg>
+              <div class="lead-tile__signals">
+                <span class="signal signal-red">No website</span>
+                <span class="signal signal-cyan">Google listing only</span>
+                <span class="signal signal-blue">Active reviews</span>
               </div>
-              <span class="badge badge--soon"><span class="badge-dot"></span>Coming Soon</span>
-            </div>
-            <h3 class="card-title">Brokernomex</h3>
-            <p class="card-tagline card-tagline--brokernomex">The machine that learns to win.</p>
-            <p class="card-description">An agentic portfolio manager that adapts in real time. Monitors positions, executes strategy, and compounds edge without waiting for a human to click.</p>
-            <span class="card-cta-muted">Coming soon</span>
-          </div>
-        </article>
-
-        <article class="glass-card glass-card--crest">
-          <div class="card-accent-bar card-accent-bar--crest"></div>
-          <div class="card-body">
-            <div class="card-top">
-              <div class="card-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M12 2L3 6v5c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V6L12 2z" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="9,12 11,14 15,10" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+              <div class="lead-tile__contact">
+                <span>(203) 555-0142</span>
+                <span class="dot">&middot;</span>
+                <span>84 Forbes Ave, East Haven CT</span>
               </div>
-              <span class="badge badge--soon"><span class="badge-dot"></span>Coming Soon</span>
+              <div class="lead-tile__actions">
+                <button class="tile-btn tile-btn--primary">Generate Demo Site</button>
+                <button class="tile-btn tile-btn--outline">View Lead</button>
+              </div>
             </div>
-            <h3 class="card-title">Crest</h3>
-            <p class="card-tagline card-tagline--crest">Sports games worth playing.</p>
-            <p class="card-description">A mobile sports game studio with a standard for quality. First title: T20 cricket. Fast, deep, built for fans who know the difference.</p>
-            <span class="card-cta-muted">Coming soon</span>
+
+            <div class="lead-tile">
+              <div class="lead-tile__header">
+                <div class="lead-tile__avatar">MH</div>
+                <div class="lead-tile__meta">
+                  <span class="lead-tile__name">Mike's Home Services</span>
+                  <span class="lead-tile__location">Hamden, CT</span>
+                </div>
+                <span class="lead-tile__score score-high">No website</span>
+              </div>
+              <div class="lead-tile__signals">
+                <span class="signal signal-red">No website</span>
+                <span class="signal signal-blue">Phone verified</span>
+              </div>
+              <div class="lead-tile__contact">
+                <span>(203) 555-0271</span>
+                <span class="dot">&middot;</span>
+                <span>112 Dixwell Ave, Hamden CT</span>
+              </div>
+              <div class="lead-tile__actions">
+                <button class="tile-btn tile-btn--primary">Generate Demo Site</button>
+                <button class="tile-btn tile-btn--outline">View Lead</button>
+              </div>
+            </div>
+
+            <div class="lead-tile">
+              <div class="lead-tile__header">
+                <div class="lead-tile__avatar">CT</div>
+                <div class="lead-tile__meta">
+                  <span class="lead-tile__name">CT Pro Plumbing &amp; Heat</span>
+                  <span class="lead-tile__location">West Haven, CT</span>
+                </div>
+                <span class="lead-tile__score score-med">Outdated site</span>
+              </div>
+              <div class="lead-tile__signals">
+                <span class="signal signal-yellow">Outdated website</span>
+                <span class="signal signal-blue">Active on Google</span>
+              </div>
+              <div class="lead-tile__contact">
+                <span>(203) 555-0389</span>
+                <span class="dot">&middot;</span>
+                <span>29 Oak St, West Haven CT</span>
+              </div>
+              <div class="lead-tile__actions">
+                <button class="tile-btn tile-btn--primary">Generate Demo Site</button>
+                <button class="tile-btn tile-btn--outline">View Lead</button>
+              </div>
+            </div>
+
           </div>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="gradient-sep" aria-hidden="true"></div>
-
-  <section class="about" id="about" aria-label="About this.live">
-    <div class="about-inner">
-      <div class="about-left">
-        <h2 class="about-headline" id="about-headline">One standard.</h2>
-        <p class="about-body" id="about-body">this.live is a software publishing house founded by Bryce Murad and Darin Manley. We build tools that solve real problems for real people -- lead generation, autonomous trading, AI infrastructure. No filler. No fluff. Just software that earns its place.</p>
-      </div>
-      <div class="pixel-grid" id="pixel-grid" aria-hidden="true"></div>
-    </div>
-  </section>
-
-  <div class="gradient-sep" aria-hidden="true"></div>
-
-  <section class="founders" id="founders" aria-label="Founders">
-    <div class="founders-inner">
-      <div class="founders-header">
-        <span class="section-eyebrow">Who We Are</span>
-        <h2 class="section-headline">The founders</h2>
-      </div>
-      <div class="founders-grid" id="founders-grid">
-        <div class="founder-card">
-          <div class="founder-avatar founder-avatar--bryce">BM</div>
-          <h3 class="founder-name">Bryce Murad</h3>
-          <p class="founder-title">Co-founder</p>
-          <p class="founder-bio">Network architect turned builder. Bryce brings the technical depth and product obsession that turns ideas into systems that actually work.</p>
-          <a href="mailto:Bryce@mail.this.live" class="founder-email">Bryce@mail.this.live</a>
-        </div>
-        <div class="founder-card">
-          <div class="founder-avatar founder-avatar--darin">DM</div>
-          <h3 class="founder-name">Darin Manley</h3>
-          <p class="founder-title">Co-founder</p>
-          <p class="founder-bio">Operator and strategist. Darin drives the business side -- partnerships, go-to-market, and making sure what we build finds the people who need it.</p>
-          <a href="mailto:systemd@mail.this.live" class="founder-email founder-email--violet">systemd@mail.this.live</a>
+          <div class="demo-footer-bar">
+            Showing 3 of 12 leads -- <a href="https://beacon.this.live" target="_blank" rel="noopener">Sign up free to see all results</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="gradient-sep" aria-hidden="true"></div>
+  <div class="sep"></div>
 
-  <section class="contact" id="contact" aria-label="Contact">
-    <div class="contact-inner">
-      <div class="contact-header">
-        <span class="section-eyebrow">Reach Out</span>
-        <h2 class="section-headline">Get in touch</h2>
-      </div>
-      <p class="contact-sub">We read everything.</p>
-      <div class="contact-grid">
-        <a href="mailto:hello@mail.this.live" class="contact-card">
-          <span class="contact-label">General inquiries</span>
-          <span class="contact-email">hello@mail.this.live</span>
-        </a>
-        <a href="mailto:Bryce@mail.this.live" class="contact-card">
-          <span class="contact-label">Bryce Murad, Co-founder</span>
-          <span class="contact-email">Bryce@mail.this.live</span>
-        </a>
-        <a href="mailto:systemd@mail.this.live" class="contact-card">
-          <span class="contact-label">Darin Manley, Co-founder</span>
-          <span class="contact-email">systemd@mail.this.live</span>
-        </a>
-      </div>
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About</h2>
+      <p class="about-text">this.live LLC is an AI software studio based in the United States. We design, build, and ship production-grade products for operators, traders, and businesses that need software built to work at scale. Every product we release runs on dedicated infrastructure with enterprise-grade security and reliability.</p>
     </div>
   </section>
 
-  <div class="gradient-sep" aria-hidden="true"></div>
+  <div class="sep"></div>
 
-  <footer class="footer" aria-label="Footer">
-    <div class="footer-inner">
-      <div class="footer-cols">
-        <div>
-          <a href="#" class="footer-logo" aria-label="this.live">
-            <div class="footer-logo-dot" aria-hidden="true"></div>
-            <span class="footer-logo-text">this.live</span>
-          </a>
-          <p class="footer-tagline">A software publishing house. Ship products that find customers, grow wealth, and compete at the highest level.</p>
-        </div>
-        <div>
-          <p class="footer-col-heading">Products</p>
-          <nav class="footer-links" aria-label="Product links">
-            <a href="https://beacon.this.live" target="_blank" rel="noopener">Beacon</a>
-            <a href="#products">Maestro</a>
-            <a href="#products">Brokernomex</a>
-            <a href="#products">Crest</a>
-          </nav>
-        </div>
-        <div>
-          <p class="footer-col-heading">Company</p>
-          <nav class="footer-links" aria-label="Company links">
-            <a href="#founders">Founders</a>
-            <a href="#contact">Contact</a>
-          </nav>
-        </div>
-        <div>
-          <p class="footer-col-heading">Founders</p>
-          <nav class="footer-links" aria-label="Founder links">
-            <a href="mailto:Bryce@mail.this.live">Bryce Murad</a>
-            <a href="mailto:systemd@mail.this.live">Darin Manley</a>
-          </nav>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="footer-copyright">&copy; 2026 this.live LLC &mdash; all rights reserved</p>
-        <p class="footer-copyright">Bryce Murad &amp; Darin Manley</p>
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="contact-text">Get in touch at <a href="mailto:hello@mail.this.live">hello@mail.this.live</a></p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">&copy; 2026 this.live LLC</span>
+      <div class="footer-links">
+        <a href="https://beacon.this.live" target="_blank" rel="noopener">Beacon</a>
+        <a href="https://bryce.this.live" target="_blank" rel="noopener">Team</a>
+        <a href="mailto:hello@mail.this.live">Contact</a>
       </div>
     </div>
   </footer>
 
-  <script>
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    hamburger.addEventListener('click', () => {
-      const isOpen = mobileMenu.classList.toggle('open');
-      hamburger.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-    });
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-      });
-    });
-
-    const grid = document.getElementById('pixel-grid');
-    for (let i = 0; i < 36; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'pixel-grid-cell';
-      grid.appendChild(cell);
-    }
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    gsap.set(['#hero-eyebrow', '#hero-headline', '#hero-sub', '#hero-buttons'], { opacity: 0, y: 30 });
-    const heroTl = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.65 } });
-    heroTl
-      .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.55 }, 0.15)
-      .to('#hero-headline', { opacity: 1, y: 0 }, 0.35)
-      .to('#hero-sub', { opacity: 1, y: 0 }, 0.55)
-      .to('#hero-buttons', { opacity: 1, y: 0 }, 0.70);
-
-    gsap.from('#cards-grid .glass-card', {
-      opacity: 0, y: 30, scale: 0.97, duration: 0.6, stagger: 0.10, ease: 'power2.out',
-      scrollTrigger: { trigger: '#cards-grid', start: 'top 80%', once: true },
-      onComplete: function() {
-        document.querySelectorAll('#cards-grid .glass-card').forEach(el => { el.style.opacity = ''; el.style.transform = ''; });
-      }
-    });
-
-    gsap.from(['#about-headline', '#about-body'], {
-      opacity: 0, y: 24, duration: 0.6, stagger: 0.12, ease: 'power2.out',
-      scrollTrigger: { trigger: '#about', start: 'top 80%', once: true }
-    });
-
-    gsap.from('#pixel-grid', {
-      opacity: 0, scale: 0.92, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: '#pixel-grid', start: 'top 85%', once: true }
-    });
-
-    gsap.from('#founders-grid .founder-card', {
-      opacity: 0, y: 30, duration: 0.6, stagger: 0.15, ease: 'power2.out',
-      scrollTrigger: { trigger: '#founders-grid', start: 'top 80%', once: true }
-    });
-
-    gsap.from('.contact-card', {
-      opacity: 0, y: 20, duration: 0.5, stagger: 0.10, ease: 'power2.out',
-      scrollTrigger: { trigger: '#contact', start: 'top 80%', once: true }
-    });
-  </script>
 </body>
 </html>
